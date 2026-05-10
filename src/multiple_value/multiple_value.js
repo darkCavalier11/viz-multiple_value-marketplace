@@ -126,6 +126,17 @@ class MultipleValue extends React.PureComponent {
         });
   };
 
+  handleTouchEnd = (cell, event) => {
+    event?.preventDefault();
+    event?.stopPropagation();
+    const html = event.currentTarget.outerHTML;
+    LookerCharts.Utils.sendLinksAndTooltipToMobile({
+      html: html,
+      links: cell.link || [],
+      event: event,
+    });
+  };
+
   recalculateSizing = () => {
     const EM = 16;
     const groupingLayout = window.innerWidth >= 768 ? 'horizontal' : 'vertical';
@@ -183,6 +194,9 @@ class MultipleValue extends React.PureComponent {
                 }
                 key={`group_${dataPoint.name}`}
                 layout={this.getLayout()}
+                onTouchEnd={(event) => {
+                  this.handleTouchEnd(dataPoint, event);
+                }}
               >
                 <DataPoint
                   titlePlacement={config[`title_placement_${dataPoint.name}`]}
